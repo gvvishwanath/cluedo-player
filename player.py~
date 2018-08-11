@@ -1,0 +1,108 @@
+from checklist import CheckList
+from confidential import Confidential
+from cmdCard import SUSPECT, WEAPON, ROOM
+
+NO_RESULT = 10
+CANNOT_GUESS = 11
+ACCUSED_CORRECTLY = 12
+ACCUSED_WRONGLY = 13
+
+class Player:
+    def __init__(self, ID, name):
+        self.ID = ID
+        self.name = name
+
+        self.checkList = CheckList(self.ID)
+        self.cardList = []
+
+        self.guess = {}
+        self.othersGuess = {}
+        self.cardToShow = None
+
+        self.isAccusing = True
+        self.canGuess = True
+
+
+    def takeCard(self, card):
+        self.cardList.append(card)
+        self.checkList.mark(self.ID, card)
+
+
+    def seeCard(self, showingPlayerID, card):
+        if card is None:
+            return
+        elif card.name is None:
+            return
+        self.checkList.mark(showingPlayerID, card)
+
+
+    def showCard(self):
+        suspect = self.othersGuess[SUSPECT]
+        weapon = self.othersGuess[WEAPON]
+        room = self.othersGuess[ROOM]
+
+        if weapon in self.cardList:
+            self.cardToShow = weapon
+        elif suspect in self.cardList:
+            self.cardToShow = suspect
+        elif room in self.cardList:
+            self.cardToShow = room
+        else:
+            self.cardToShow = None
+
+        return self.cardToShow
+
+
+    def listen(self, guess):
+        self.othersGuess = guess
+
+
+    def makeGuess(self):
+        self.guess[SUSPECT] = self.checkList.firstUnmarkedSuspect()
+        self.guess[WEAPON] = self.checkList.firstUnmarkedWeapon()
+        self.guess[ROOM] = self.checkList.firstUnmarkedRoom()
+
+
+    def playRound(self, players, envelope):
+        if not self.canGuess:
+            return CANNOT_GUESS
+
+        allPassed = True
+        self.makeGuess()
+
+        for player in players:
+            if player.ID == self.ID:
+                continue
+
+            player.listen(self.guess)
+            card = player.showCard()
+
+            if card is not None:
+                allPassed = False
+            self.seeCard(player.ID, card)
+
+        if allPassed:
+            self.isAccusing = True
+            return self.accuse(envelope)
+
+        return NO_RESULT
+
+
+    def accuse(self, envelope):
+        if self.isAccusing:
+            answer = envelope.takeOutOfEnvelope()
+
+            if answer[SUSPECT] == self.guess[SUSPECT] and answer[WEAPON] == self.guess[WEAPON] and answer[ROOM] == self.guess[ROOM]:
+                return ACCUSED_CORRECTLY
+
+            else:
+                self.canGuess = False
+                return ACCUSED_WRONGLY
+
+
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+import basicInfo
+
+class CheckList:
+	def __init__(self):
+		self.Suspects = {}
+		self.Weapons = {}
+		self.Rooms = {}
+		self.fill()
+
+	def fill(self):
+		for name in SuspectsList:

@@ -1,0 +1,32 @@
+from player import Player
+from cmdCard import SUSPECT, WEAPON, ROOM
+
+class Confidential:
+    def __init__(self):
+        self.cards = {}
+        self.cards[SUSPECT] = None
+        self.cards[WEAPON] = None
+        self.cards[ROOM] = None
+
+
+    def putInEnvelope(self, answers):
+        isValid = False
+
+        if answers is not None:
+            if len(answers) == 3:
+                if answers[0] != None and answers[1] != None and answers[2] != None:
+                    isValid = True
+                    for card in answers:
+                        self.cards[card.code] = card
+
+        if not isValid:
+            print "Confidential.putInEnvelope(): Please pass a list of three cards as parameter."
+
+
+    def takeOutOfEnvelope(self):
+        cardsCopy = {}
+        cardsCopy[SUSPECT] = self.cards[SUSPECT]
+        cardsCopy[WEAPON] = self.cards[WEAPON]
+        cardsCopy[ROOM] = self.cards[ROOM]
+        cards = {}
+        return cardsCopy

@@ -1,0 +1,61 @@
+from cmdCard import SuspectsList, WeaponsList, RoomsList, SUSPECT, WEAPON, ROOM, Card
+from basicInfo import SuspectCards, WeaponCards, RoomCards
+
+class CheckList:
+    def __init__(self, ownerID):
+        self.Suspects = {}
+        self.Weapons = {}
+        self.Rooms = {}
+        self.hash = {SUSPECT: self.Suspects, WEAPON: self.Weapons, ROOM: self.Rooms}
+        self.ownerID = ownerID
+        self.fill()
+
+
+    def fill(self):
+        for name in SuspectsList:
+            self.Suspects[name] = None
+
+        for name in WeaponsList:
+            self.Weapons[name] = None
+
+        for name in RoomsList:
+            self.Rooms[name] = None
+
+    def reset(self):
+        self.fill()
+
+
+    def mark(self, playerID, card):
+        if card.name is None:
+            print "Invalid card shown by %s to %s" % (playerID, self.ownerID)
+            return
+
+        self.hash[card.code][card.name] = playerID
+
+    def unmark(self, card):
+        if card.name is None:
+            print "Invalid card to unmark for %s " % (self.ownerID)
+            return
+
+        self.hash[card.code][card.name] = None
+
+
+    def isWithOwner(self, card):
+        if self.hash[card.code][card.name] == self.ownerID:
+            return True
+        return False
+
+
+    def firstUnmarked(self, code):
+        for key in self.hash[code].keys():
+            if self.hash[code][key] is None:
+                return Card(key, code)
+
+    def firstUnmarkedSuspect(self):
+        return self.firstUnmarked(SUSPECT)
+
+    def firstUnmarkedWeapon(self):
+        return self.firstUnmarked(WEAPON)
+
+    def firstUnmarkedRoom(self):
+        return self.firstUnmarked(ROOM)

@@ -1,0 +1,29 @@
+SuspectsList = ["COLONEL MUSTARD", "PROFESSOR PLUM", "MR. GREEN", "MRS. PEACOCK", "MISS SCARLET", "MRS. WHITE"]
+WeaponsList = ["KNIFE", "CANDLESTICK", "REVOLVER", "ROPE", "LEAD PIPE", "WRENCH"]
+RoomsList = ["HALL", "LOUNGE", "DINING ROOM", "KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD ROOM", "LIBRARY", "STUDY"]
+
+SUSPECT = 0
+WEAPON = 1
+ROOM = 2
+INVALID = 3
+
+cardInfo = {SUSPECT: SuspectsList, WEAPON: WeaponsList, ROOM: RoomsList}
+
+class Card:
+	def __init__(self, name, code):
+		self.name = name
+		self.code = code
+		self.isValid = self.validate()
+
+	def __str__(self):
+		string = self.name + ": " + self.code
+
+	def validate(self):
+		if code in cardInfo.keys():
+			if name.upper() in cardInfo[code]:
+				return True
+
+		self.name = None
+		self.code = INVALID
+		return False
+			

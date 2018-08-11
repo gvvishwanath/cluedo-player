@@ -1,0 +1,19 @@
+import cmdCard
+
+SuspectCards = []
+WeaponCards = []
+RoomCards = []
+
+for name in SuspectsList:
+	card = cmdCard.Card(name, SUSPECT)
+	SuspectsCards.append(card)
+
+for name in WeaponsList:
+	card = cmdCard.Card(name, WEAPON)
+	WeaponsCards.append(card)
+
+for name in roomsList:
+	card = cmdCard.Card(name, ROOM)
+	RoomsCards.append(card)
+
+
